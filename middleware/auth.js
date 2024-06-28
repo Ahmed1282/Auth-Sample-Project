@@ -35,16 +35,6 @@ const AuthRole = async (req, res, next) => {
     next();
   } 
 
-// const AuthRole = (roles) => {
-//   return (req, res, next) => {
-//     const user = req.user;
-//     if (!user || !roles.includes(user.roles)) {
-//       return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized' });
-//     }
-//     console.log(user.roles);
-//     next();
-//   };
-// };
   
 
 module.exports = {
