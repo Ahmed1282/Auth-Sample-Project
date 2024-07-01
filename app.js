@@ -21,7 +21,7 @@ app.use('/api', productRoutes);
 app.use('/api', categoryRoutes);
 
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 (async () => {
   try {

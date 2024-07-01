@@ -1,36 +1,21 @@
 const express = require('express');
 const productController = require('../controllers/productController');
 const { param, query, check, validationResult } = require('express-validator');
+const validator = require ('../middleware/validator')
+const auth = require('../middleware/auth');
+
 
 const router = express.Router();
 
 // router.post('/products', productController.createProduct);
 //ideally use method body as controller has req.body but check can also work 
-router.post('/products',
-    [
-      check('name').notEmpty(),
-      check('price').isFloat({ gt: 0 }),
-    ], (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
-      next();
-    },
-    productController.createProduct
-  );
+router.post('/products', validator.validateProduct, auth.AuthRole("SuperAdmin"), auth.AuthRole("Admin"), productController.createProduct);
 
 // router.get('/products/:id', productController.getProduct);
-router.get('/products/:id', [param("id").isInt().withMessage("Not found")], (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  }, productController.getProduct);
+router.get('/products/:id', validator.validateProductId, productController.getProduct);
 
-router.put('/products/:id', productController.updateProduct);
-router.delete('/products/:id', productController.deleteProduct);
-router.get('/products', productController.getAllProducts);
+router.put('/products/:id', productController.updateProduct, auth.AuthRole("SuperAdmin"), auth.AuthRole("Admin"));
+router.delete('/products/:id', productController.deleteProduct, auth.AuthRole("SuperAdmin"), auth.AuthRole("Admin"));
+router.get('/products', productController.getAllProducts, auth.AuthRole("SuperAdmin"), auth.AuthRole("Admin"));
 
 module.exports = router;

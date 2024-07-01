@@ -9,6 +9,12 @@ const {
 const createCategory = async (req, res) => {
   try {
     const { name } = req.body;
+    //checking whether catergory has unique name 
+    const existingCategory = await Category.findOne({ where: { name } });
+    if (existingCategory) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Category name already exists' });
+    }
+
     const category = await Category.create({ name });
     res.status(StatusCodes.CREATED).json(category);
   } catch (error) {
