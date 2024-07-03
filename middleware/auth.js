@@ -31,27 +31,28 @@ const AuthToken = async (req, res, next) => {
   }
 };
 
-const AuthRole = (role) = async (req, res, next) => {
-    const user = req.user;
-    console.log(user.roles)
-  
-    if (!user || user.roles !== role) {
-      return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized', user });
-    }
-  
-    next();
-  } 
-
-// const AuthRole = (roles) => {
-//   return (req, res, next) => {
+// const AuthRole = (role) = async (req, res, next) => {
 //     const user = req.user;
-//     if (!user || !roles.includes(user.roles)) {
-//       return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized' });
+//     console.log(user.roles)
+  
+//     if (!user || user.roles !== role) {
+//       return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized', user });
 //     }
-//     console.log(user.roles);
+  
 //     next();
-//   };
-// };
+//   } 
+
+
+const AuthRole = (roles) => {
+  return (req, res, next) => {
+    const user = req.user;
+    if (!user || !roles.includes(user.roles)) {
+      return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized' });
+    }
+    console.log(user.roles);
+    next();
+  };
+};
   
 
 module.exports = {
