@@ -1,9 +1,10 @@
 const express = require('express');
 const { OK, INTERNAL_SERVER_ERROR } = require('http-status-codes');
 const cache = require('../middleware/cache');
+const auth = require('../middleware/auth');
 const router = express.Router();
 
-router.get('/clear-cache/products', async (req, res, next) => {
+router.get('/clear-cache/products', auth.AuthToken, auth.AuthRole(["SuperAdmin"]), async (req, res, next) => {
   try {
     await cache.clearCache('/api/products');
     res.status(OK).json({ status: OK, message: 'Cache cleared for /products' });
@@ -13,7 +14,7 @@ router.get('/clear-cache/products', async (req, res, next) => {
   }
 });
 
-router.get('/clear-cache/products/category/:categoryId', async (req, res, next) => {
+router.get('/clear-cache/products/category/:categoryId', auth.AuthToken, auth.AuthRole(["SuperAdmin"]), async (req, res, next) => {
   const { categoryId } = req.params;
   try {
     await cache.clearCache(`/api/products/category/${categoryId}`);
