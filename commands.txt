@@ -1,0 +1,4 @@
+brew services start redis
+nodemon start
+node populateTables.js
+node emptyTables.js

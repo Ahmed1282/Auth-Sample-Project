@@ -21,7 +21,7 @@ const AuthToken = async (req, res, next) => {
       return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'User not authorized' });
     }
     req.user = user;
-    console.log(user)
+    //console.log(user)
     next();
     //return res.status(StatusCodes.OK).json({ message: 'Authorized', user });
   } catch (error) {
@@ -35,7 +35,7 @@ const AuthToken = async (req, res, next) => {
 //     const user = req.user;
 //     console.log(user.roles)
   
-//     if (!user || user.roles !== role) {
+//     if (!user || !roles.includes(user.roles)) {
 //       return res.status(StatusCodes.FORBIDDEN).json({ message: 'Unauthorized', user });
 //     }
   

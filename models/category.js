@@ -15,4 +15,6 @@ const Category = sequelize.define('Category', {
   timestamps: true
 });
 
+
+
 module.exports = Category;

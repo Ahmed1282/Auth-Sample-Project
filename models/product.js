@@ -16,8 +16,9 @@ const Product = sequelize.define('Product', {
     type: DataTypes.FLOAT,
     allowNull: false
   },
-  categoryId: {
+  CategoryId: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     references: {
       model: Category,
       key: 'id'
@@ -27,8 +28,11 @@ const Product = sequelize.define('Product', {
   timestamps: true
 });
 
+
 //For sequelize
-Category.hasMany(Product, {foreignkey: 'categoryId'});
-Product.belongsTo(Category, {foreignkey: 'categoryId'});
+
+Product.belongsTo(Category, {foreignkey: 'CategoryId'});
+//Category.hasMany(Product, {foreignkey: 'categoryId'});
+
 
 module.exports = Product;

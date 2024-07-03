@@ -4,6 +4,7 @@ const { param, query, check, validationResult } = require('express-validator');
 const validator = require ('../middleware/validator')
 const auth = require('../middleware/auth');
 const User = require('../models/user');
+const cache = require('../middleware/cache')
 
 
 const router = express.Router();
@@ -17,6 +18,10 @@ router.get('/products/:id', validator.validateProductId, auth.AuthToken, auth.Au
 
 router.put('/products/:id', auth.AuthToken, auth.AuthRole(["SuperAdmin","Admin"]), productController.updateProduct );
 router.delete('/products/:id', auth.AuthToken, auth.AuthRole(["SuperAdmin","Admin"]), productController.deleteProduct);
-router.get('/products', auth.AuthToken, auth.AuthRole(["SuperAdmin","Admin"]), productController.getAllProducts);
+// router.get('/products', auth.AuthToken, auth.AuthRole(["SuperAdmin","Admin"]), productController.getAllProducts);
+// router.get('/products/category/:categoryId', auth.AuthToken, auth.AuthRole(["SuperAdmin","Admin"]), productController.getProductsByCategory);
+//cache.createCache(600)
+router.get('/products', auth.AuthToken, auth.AuthRole(["SuperAdmin", "Admin"]), cache.createCache(600), productController.getAllProducts);
+router.get('/products/category/:categoryId', auth.AuthToken, auth.AuthRole(["SuperAdmin", "Admin"]), cache.createCache(600), productController.getProductsByCategory);
 
 module.exports = router;

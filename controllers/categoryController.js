@@ -47,8 +47,18 @@ const deleteCategory = async (req, res) => {
     }
   };
 
+  const getCategories = async (req, res) => {
+    try {
+      const categories = await Category.findAll();
+      res.json(categories);
+    } catch (error) {
+      res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
+  };
+
 module.exports = {
   createCategory,
   getCategory,
-  deleteCategory
+  deleteCategory,
+  getCategories
 };

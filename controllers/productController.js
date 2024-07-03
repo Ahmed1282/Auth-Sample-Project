@@ -83,17 +83,48 @@ const deleteProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
+    const startTime = new Date();
     const products = await Product.findAll();
+    const endTime = new Date();
+    const time = endTime - startTime;
+    console.log(`WITHOUT CACHING Fetched total products: ${products.length} products in ${time}ms`);
+
     res.json(products);
   } catch (error) {
+    console.error('Error fetching all products:', error);
     res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
   }
 };
+
+
+const getProductsByCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const category = await Category.findByPk(categoryId);
+    if (!category) {
+      return res.status(StatusCodes.NOT_FOUND).json({ error: 'Category not found' });
+    }
+    const startTime = new Date();
+    const products = await Product.findAll({ where: { CategoryId: categoryId } });
+    const endTime = new Date();
+    const time = endTime - startTime; 
+
+    // Log the time when data was fetched
+    console.log(`WITHOUT CACHING Fetched products from category ${category.name} : ${products.length} products in ${time}ms`);
+
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products by category:', error);
+    res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+  }
+};
+
 
 module.exports = {
   createProduct,
   getProduct,
   updateProduct,
   deleteProduct,
-  getAllProducts
+  getAllProducts,
+  getProductsByCategory
 };
